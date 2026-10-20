@@ -7,8 +7,8 @@ description: Build a lab-meeting PPT (plus HTML preview) from raw Western blot i
 
 Turn a folder of raw imager exports into a polished, **editable** WB slide. Typical input: one
 folder per antibody containing `<id>_<antibody>_<variant>.Tif` files, e.g.
-`IM000001_anti-Cas9_super_long.Tif`, plus `IM000002_anti-Cas9_marker.Tif` (membrane/ladder
-photo) and `IM000003_anti-Cas9_long_merge.Tif` (composite).
+`IM035670_anti-Cas9_super_long.Tif`, plus `IM035668_anti-Cas9_marker.Tif` (membrane/ladder
+photo) and `IM035669_anti-Cas9_long_merge.Tif` (composite).
 
 Golden rule learned from real iterations: **the hard part is reading the images, not the
 layout.** Do the analysis honestly, show evidence to the user, ask one consolidated round of
@@ -41,8 +41,8 @@ Run per antibody on the best-guess exposure + marker channel:
 
 ```bash
 python3 scripts/analyze_scan.py \
-  --ecl anti-Cas9/IM000001_anti-Cas9_super_long.Tif \
-  --marker anti-Cas9/IM000002_anti-Cas9_marker.Tif \
+  --ecl anti-Cas9/IM035670_anti-Cas9_super_long.Tif \
+  --marker anti-Cas9/IM035668_anti-Cas9_marker.Tif \
   --ladder 180,135,100,75,65,45,35,25,15,10 \
   --anchor "Cas9=160" --anchor "Actin=42" \
   --lanes 4 --out blot_map_cas9.json --overlay overlay_cas9.png
@@ -207,10 +207,14 @@ sync) with identical conventions — label box at `blot_x − 1.0`, w 0.82, righ
 the same shadow treatment as build_deck (below), or the second tick ships with a shadow.
 
 **Public demo / de-identified decks**: never reuse real scan crops — generate synthetic
-phantom "scans" instead (white 2160×2160 canvas, dark 2-D Gaussian bands per lane + Gaussian
-noise + slight blur, run through the same make_crops pipeline), swap in Protein X / Mut-A/B/C
-style names, placeholder antibody lines, and a visible "Demo deck: synthetic phantom scans"
-line. Verified on the 20261018 demo deck.
+phantom "scans" instead, and make them look like real ECL: plain 2-D Gaussians read as drawn
+dots (user rejected the first attempt). What sells it: bands as elongated cores with ragged
+edges and hot/cold patches (smooth 1-D noise modulating amplitude + centerline wiggle),
+asymmetric profile (sharp top, diffuse bottom tail), sub-band smear, intensity-dependent
+width, faint vertical lane tracks, large-scale background mottle + vignette, a few dust
+specks, blur + two-stage noise. Then run through the normal make_crops pipeline, swap in
+Protein X / Mut-A/B/C style names, placeholder antibody lines, and a visible "Demo deck:
+synthetic phantom scans" line. Verified on the 20261018 demo deck.
 
 Layout system defaults (all overridable in spec):
 
