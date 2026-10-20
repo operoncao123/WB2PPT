@@ -207,14 +207,15 @@ sync) with identical conventions — label box at `blot_x − 1.0`, w 0.82, righ
 the same shadow treatment as build_deck (below), or the second tick ships with a shadow.
 
 **Public demo / de-identified decks**: never reuse real scan crops — generate synthetic
-phantom "scans" instead, and make them look like real ECL: plain 2-D Gaussians read as drawn
-dots (user rejected the first attempt). What sells it: bands as elongated cores with ragged
-edges and hot/cold patches (smooth 1-D noise modulating amplitude + centerline wiggle),
-asymmetric profile (sharp top, diffuse bottom tail), sub-band smear, intensity-dependent
-width, faint vertical lane tracks, large-scale background mottle + vignette, a few dust
-specks, blur + two-stage noise. Then run through the normal make_crops pipeline, swap in
-Protein X / Mut-A/B/C style names, placeholder antibody lines, and a visible "Demo deck:
-synthetic phantom scans" line. Verified on the 20261018 demo deck.
+phantom "scans" instead. Real WB bands are COMPACT SEPARATE DASHES, one per lane — wide
+Gaussians or heavy raggedness make lanes merge into blobs ("一坨一坨" — user rejected both
+attempts). What works: per band a horizontal flat-core dash (half-width ~30% of lane spacing,
+tanh-soft ends), vertical profile with sharp top (σ≈5) and slightly diffuse bottom (σ≈9.5)
+plus a faint sub-band smear, ≤10% slow amplitude variation and ≤2px centerline wiggle, clean
+white gaps between lanes, subtle lane tracks, gentle background mottle/vignette, sparse dust,
+blur + two-stage noise. Run through the normal make_crops pipeline, swap in Protein X /
+Mut-A/B/C style names, placeholder antibody lines, and a visible "Demo deck: synthetic
+phantom scans" line. Verified on the 20261018 demo deck.
 
 Layout system defaults (all overridable in spec):
 
