@@ -8,6 +8,33 @@ geometry. Built as an agent skill (the whole workflow is documented in [`SKILL.m
 
 *Demo output (synthetic phantom scans, no real data).*
 
+## Install (one click per harness)
+
+The repo **is** the skill — cloning it is enough. `install.sh` just puts it where your harness looks:
+
+```bash
+git clone https://github.com/operoncao123/WB2PPT.git
+cd WB2PPT
+bash install.sh            # auto-installs into every harness detected on this machine
+bash install.sh --deps     # also pip-install the python dependencies
+```
+
+| Harness | Command | Result |
+| --- | --- | --- |
+| Claude Code | `bash install.sh --claude` | `~/.claude/skills/raw-western-blot-to-ppt` — auto-discovered; just say “把WB数据整理成PPT” |
+| ZCode | `bash install.sh --zcode` | `~/.zcode/skills/raw-western-blot-to-ppt` |
+| openskills / `.agents` | `bash install.sh --agents` | `~/.agents/skills/...` |
+| Codex CLI | `bash install.sh --codex` | `~/.codex/skills/...` |
+| Project-level | `bash install.sh --project /path/to/repo` | `<repo>/.claude/skills/...` (committed with the project) |
+| Codex / Cursor / Windsurf / Cline / Copilot (rule files) | `bash install.sh --rule-file ~/.codex/AGENTS.md` | appends an instruction snippet pointing at the skill (`.cursorrules`, `.clinerules`, `.github/copilot-instructions.md` …) |
+
+`install.sh` is idempotent — re-running after `git pull` updates existing installs. The skill is
+the standard `SKILL.md` format, so any harness that reads skills natively can also just point at
+the cloned folder.
+
+Run-time python deps: `pip install -r requirements.txt` (numpy, scipy, pillow, pyyaml,
+python-pptx, lxml, pymupdf). LibreOffice is optional — only the QA render step uses it.
+
 ## What it does
 
 - **Lane & band analysis** — detects lanes (with cross-panel grid QC so weak lanes don't
